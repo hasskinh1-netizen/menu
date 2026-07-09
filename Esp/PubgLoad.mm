@@ -25,20 +25,22 @@ UIWindow *mainWindow;
 
 + (void)load
 {
-[super load];
- 
-        // Wait 8 seconds for Unity Engine to fully initialize its ViewController hierarchy
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-             mainWindow = [UIApplication sharedApplication].keyWindow;
-            extraInfo =  [PubgLoad new];
-            [extraInfo initTapGes];
-            [extraInfo tapIconView];
-            [extraInfo initTapGes2];
-            [extraInfo tapIconView2];
-          
-        });
-        
-    }
+    [super load];
+
+    // Wait 8 seconds for Unity Engine to fully initialize
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        mainWindow = [UIApplication sharedApplication].keyWindow;
+        extraInfo = [PubgLoad new];
+
+        // Register gestures: 3-finger double tap = show, 2-finger double tap = hide
+        [extraInfo initTapGes];
+        [extraInfo initTapGes2];
+
+        // Auto-open menu immediately on startup
+        [extraInfo tapIconView];
+    });
+}
+
 
 -(void)initTapGes
 {
