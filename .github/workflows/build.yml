@@ -1,0 +1,38 @@
+name: Build and Package Tweak
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Tweak
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Theos
+        uses: Randomblock1/theos-action@v1
+        with:
+          theos-src: 'https://github.com/theos/theos'
+          theos-sdks: 'https://github.com/theos/sdks'
+          theos-sdks-branch: 'master'
+
+      - name: Build Tweak Package
+        run: |
+          make package FINALPACKAGE=1
+        env:
+          TARGET: iphone:clang:latest:14.0
+
+      - name: Upload Debian Package Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tweak-package
+          path: packages/*.deb
