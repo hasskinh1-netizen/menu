@@ -2,5 +2,5 @@
 .theos/
 obj/
 packages/
-il2cpp.h
-dump.cs
+/il2cpp.h
+/dump.cs
