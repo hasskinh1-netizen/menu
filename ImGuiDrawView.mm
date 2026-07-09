@@ -77,7 +77,7 @@ static int g_rangeExt = 300;
 
 //=== HOOK ORIGINALS ===
 // Map/ESP - LVActorLinker.SetVisible (the one from original code)
-void (*_LVActorLinker_SetVisible)(void *instance, int camp, bool bVisible, bool forceSync);
+bool (*_LVActorLinker_SetVisible)(void *instance, int camp, bool bVisible, bool forceSync);
 
 // Skills
 bool (*_LSkillComponent_IsSkillCDReady)(void *instance, int slotType);
@@ -85,7 +85,7 @@ void (*_SkillSlot_SetSkillNoCost)(void *instance, bool noCost);
 void (*_SkillSlot_ReduceCD)(void *instance);
 
 // Damage
-void (*_LHurtComponent_TakeDamage)(void *instance, void *hurtData);
+int (*_LHurtComponent_TakeDamage)(void *instance, void *hurtData);
 
 // Horizon/Fog
 void (*_HorizonMarker_set_Enabled)(void *instance, bool value);
@@ -101,7 +101,7 @@ void *(*_SkillIndicateSystem_CurTargetActor)(void *instance);
 //=== HOOK FUNCTIONS ===
 
 // 1. MAP HACK - Force show enemies on minimap
-void LVActorLinker_SetVisible(void *instance, int camp, bool bVisible, bool forceSync) {
+bool LVActorLinker_SetVisible(void *instance, int camp, bool bVisible, bool forceSync) {
     if (instance != nullptr && g_mapHack) {
         if (camp == 1 || camp == 2 || camp == 110 || camp == 255) {
             bVisible = true;
@@ -126,9 +126,9 @@ void SkillSlot_SetSkillNoCost(void *instance, bool noCost) {
 }
 
 // 3. GOD MODE - Immune damage
-void LHurtComponent_TakeDamage(void *instance, void *hurtData) {
+int LHurtComponent_TakeDamage(void *instance, void *hurtData) {
     if (instance != nullptr && g_godMode) {
-        return;
+        return 0;
     }
     return _LHurtComponent_TakeDamage(instance, hurtData);
 }
