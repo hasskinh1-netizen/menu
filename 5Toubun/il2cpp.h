@@ -93,7 +93,9 @@ void Il2CppAttach()
     IL2CPP::il2cpp_string_new_utf16 = reinterpret_cast<void *(*)(const wchar_t *, int32_t)>(dlsym(handle, "il2cpp_string_new_utf16"));
     IL2CPP::il2cpp_string_chars = reinterpret_cast<uint16_t *(*)(void *)>(dlsym(handle, "il2cpp_string_chars"));
 
-    dlclose(handle);
+    // Do not call dlclose(handle) to prevent unmapping the library
+    // and causing subsequent calls to dlsym-resolved pointers to crash.
+    // dlclose(handle);
 }
 
 void *Il2CppGetImageByName(const char *image)
