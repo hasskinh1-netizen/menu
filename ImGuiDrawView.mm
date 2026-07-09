@@ -254,8 +254,6 @@ void initial_setup(){
             DobbyHook((void *)getRealOffset(s_methodOffsets[OFF_PlayerMovement_set_maxSpeed]),
                       (void *)PlayerMovement_set_maxSpeed, (void **)&_PlayerMovement_set_maxSpeed);
     });
-
-    g_hooksInit = true;
 }
 
 - (instancetype)initWithNibName:(nullable NSString *)nibNameOrNil bundle:(nullable NSBundle *)nibBundleOrNil
@@ -436,9 +434,13 @@ void applyFogPatch(bool enable) {
         ImFont* font = ImGui::GetFont();
         font->Scale = 15.f / font->FontSize;
 
-        // Init hooks on first menu open
+        // Init hooks on first menu open — run on background thread
+        // so Il2CppAttach doesn't block/freeze the Metal render loop
         if (!g_hooksInit) {
-            initial_setup();
+            g_hooksInit = true; // mark early to prevent multiple dispatches
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                initial_setup();
+            });
         }
 
         //=== DRAW MENU ===

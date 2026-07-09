@@ -27,7 +27,8 @@ UIWindow *mainWindow;
 {
 [super load];
  
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // Wait 8 seconds for Unity Engine to fully initialize its ViewController hierarchy
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
              mainWindow = [UIApplication sharedApplication].keyWindow;
             extraInfo =  [PubgLoad new];
             [extraInfo initTapGes];
