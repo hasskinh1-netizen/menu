@@ -21,7 +21,7 @@ struct MemoryFileInfo {
 };
 
 MemoryFileInfo getBaseInfo() {
-    MemoryFileInfo _info;
+    MemoryFileInfo _info = {};
     std::string applicationsPath = "/private/var/containers/Bundle/Application";
     for (uint32_t i = 0; i < _dyld_image_count(); i++)
     {
@@ -41,7 +41,7 @@ MemoryFileInfo getBaseInfo() {
 }
 
 MemoryFileInfo getMemoryFileInfo(const std::string& fileName) {
-    MemoryFileInfo _info;
+    MemoryFileInfo _info = {};
     const uint32_t imageCount = _dyld_image_count();
     for (uint32_t i = 0; i < imageCount; i++) {
         const char *name = _dyld_get_image_name(i);
